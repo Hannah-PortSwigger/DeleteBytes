@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group = 'net.portswigger.hannah-portswigger'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'net.portswigger.burp.extensions:montoya-api:2024.7'
+}
