@@ -35,7 +35,8 @@ public class MyContextMenuItemsProvider implements ContextMenuItemsProvider
     {
         if (event.isFrom(MESSAGE_EDITOR_REQUEST, MESSAGE_EDITOR_RESPONSE))
         {
-            JMenuItem menuItem = new JMenuItem("Delete bytes...");
+            JMenuItem menuItem = new JMenuItem(Extension.EXTENSION_NAME);
+
             menuItem.addActionListener(l -> {
                 try {
                     int numberOfBytes = parseInt(showInputDialog(
