@@ -12,8 +12,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static burp.api.montoya.core.ByteArray.byteArray;
+import static burp.api.montoya.http.message.requests.HttpRequest.httpRequest;
+import static burp.api.montoya.http.message.responses.HttpResponse.httpResponse;
 import static burp.api.montoya.ui.contextmenu.InvocationType.*;
+import static java.lang.Integer.parseInt;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import static javax.swing.JOptionPane.showInputDialog;
 
 public class MyContextMenuItemsProvider implements ContextMenuItemsProvider
 {
@@ -34,7 +38,12 @@ public class MyContextMenuItemsProvider implements ContextMenuItemsProvider
             JMenuItem menuItem = new JMenuItem("Delete bytes...");
             menuItem.addActionListener(l -> {
                 try {
-                    int numberOfBytes = Integer.parseInt(JOptionPane.showInputDialog(suiteFrame, "Enter number of bytes to delete", "Delete bytes", QUESTION_MESSAGE));
+                    int numberOfBytes = parseInt(showInputDialog(
+                            suiteFrame,
+                            "Enter number of bytes to delete",
+                            "Delete bytes",
+                            QUESTION_MESSAGE
+                    ));
 
                     int startOffset = event.messageEditorRequestResponse().get().caretPosition() - 1;
 
@@ -44,7 +53,7 @@ public class MyContextMenuItemsProvider implements ContextMenuItemsProvider
                     {
                         ByteArray newByteArray = constructByteArray(httpRequestResponse.request().toByteArray(), startOffset, numberOfBytes);
 
-                        HttpRequest request = HttpRequest.httpRequest(httpRequestResponse.request().httpService(), newByteArray);
+                        HttpRequest request = httpRequest(httpRequestResponse.request().httpService(), newByteArray);
                         request = request.withBody(request.body());
 
                         event.messageEditorRequestResponse().get().setRequest(request);
@@ -53,7 +62,7 @@ public class MyContextMenuItemsProvider implements ContextMenuItemsProvider
                     {
                         ByteArray newByteArray = constructByteArray(httpRequestResponse.response().toByteArray(), startOffset, numberOfBytes);
 
-                        HttpResponse response = HttpResponse.httpResponse(newByteArray);
+                        HttpResponse response = httpResponse(newByteArray);
                         response = response.withBody(response.body());
 
                         event.messageEditorRequestResponse().get().setResponse(response);
